@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="static/index.css">
+    </head>
+    <body>
+        <main>
+            <h1>Teachable custom inputs</h1>
+
+            <section>
+                <h2>Bulk upload users</h2>
+
+            <form enctype="multipart/form-data" action="/users" method="POST">
+                <label>
+                    Your Teachable username
+                <input type="text" name="username" value="wkrakow@plantpurecommunities.org" >
+                </label>
+                <label>
+                    Your Teachable password
+                <input type="password" name="password" placeholder="Password" value="dm5h0xKy9i7O0Wr24kG^0R">
+                </label>
+                <label>
+                    New users file (.csv)
+                <input type="file" name="new_user_file" >
+                </label>
+                <label>
+                    Course
+                <select name="course_id">
+                    <option value="1541222">Community Rx</option>
+                </select>
+                </label>
+                <button type="submit">Add users</button>
+            </form>
+            </section>
+        </main>
+        <script src="" async defer></script>
+    </body>
+</html>

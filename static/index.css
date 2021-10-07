@@ -1,0 +1,82 @@
+:root {
+    --color-primary: hsl(199, 100%, 46%);
+    --color-secondary: hsl(36, 70%, 53%);
+    --color-primary-200: hsl(199, 100%, 76%);
+    --color-primary-50: hsl(199, 100%, 98%);
+    --color-text: #333;
+    --color-background: #fff;
+    --font-xxl: 3rem;
+    --font-xl: 2.25rem;
+    --font-l: 1.5rem;
+    --font-m: 1.25rem;
+    --font-s: 1rem;
+    --font-xs: 0.875rem;
+    --shadow-regular: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+html {
+    font-size: 62.5%;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    font-size: var(--font-m);
+    line-height: 1.5;
+    color: var(--color-text);
+    background-color: var(--color-background);
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    width: max-content;
+}
+
+input, button, select {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 1.25rem 0.5rem;
+    padding-bottom: 0.75rem;
+    margin: 0;
+    font-size: var(--font-m);
+    border: none;
+    border-bottom: 5px solid var(--color-primary-200);
+    background-color: var(--color-primary-50);
+    border-radius: 0.25rem;
+    box-shadow: var(--shadow-regular);
+}
+
+form label {
+    margin: 1.5rem 0;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+button {
+    background-color: var(--color-primary);
+    padding: 1rem;
+    border: none;
+    color: var(--color-background);
+    cursor: pointer;
+}
+
+
+section {
+    border: 1px solid var(--color-primary-200);
+    border-radius: 0.25rem;
+    padding: 1rem;
+}
