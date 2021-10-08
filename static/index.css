@@ -252,3 +252,8 @@ tr {
 #error {
     color: var(--color-red-400);
 }
+
+section #results {
+    margin: 2rem auto;
+    padding: 1rem;
+}
