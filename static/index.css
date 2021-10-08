@@ -248,3 +248,7 @@ tr {
 #table-wrapper {
     margin-top: 3rem;
 }
+
+#error {
+    color: var(--color-red-400);
+}
