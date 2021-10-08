@@ -28,7 +28,7 @@
     --font-xs: 0.875rem;
     --shadow-regular: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     --transition-fast: all 0.2s ease-in-out;
-    --heavy: 500;
+    --heavy: 600;
     --regular: 400;
     --light: 300;
 }
@@ -183,6 +183,15 @@ h2 {
 
 h4, h5 {
     margin: 0;
+}
+
+p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+p#fileName {
+    font-weight: var(--heavy);
 }
 
 ul {

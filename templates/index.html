@@ -37,9 +37,10 @@
         </form>
         <form id="enroll">
             </label>
-            <label class="file">
+            <label class="file" id="user-file-label">
                 Upload users file (.csv)
                 <input type="file" name="new_user_file" id="new_user_file">
+                <p id="fileName"></p>
             </label>
             <label>
                 Course
@@ -53,6 +54,12 @@
         <div id="table-wrapper"></div>
     </main>
     <script async defer>
+        function displayUploaded_file(e) {
+            var uploadButton = document.getElementById('new_user_file');
+            var fileName = uploadButton.files[0].name
+            var label = document.getElementById("fileName");
+            label.innerText = fileName;
+        }
         function getUsernameAndPassword() {
             var username = document.querySelector('input[name="username"]').value;
             var password = document.querySelector('input[name="password"]').value;
@@ -72,8 +79,8 @@
                 document.getElementById(targetId)
             );
             if (fileName) {
-                var uploadingFile = document.getElementById(fileName)
-                formData.append(fileName, uploadingFile.files[0]);
+                var uploadButton = document.getElementById(fileName);
+                formData.append(fileName, uploadButton.files[0]);
             }
             var usernameAndPassword = getUsernameAndPassword();
             formData.append('username', usernameAndPassword.username);
@@ -144,6 +151,7 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('form#enroll').addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(e, 'enroll', "/users", "new_user_file") });
+            document.querySelector("#new_user_file").addEventListener('change', (e) => e.eventPhase === 2 ? displayUploaded_file(e) : null);
         });
     </script>
 </body>
