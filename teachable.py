@@ -1,4 +1,4 @@
-from typing import Any, Literal, TypedDict, Union
+from typing import Literal, TypedDict, Union
 import requests
 import base64
 
@@ -18,7 +18,6 @@ def create_session(username, password):
     Creates a session for the given username and password.
     """
     encode_basic_auth = base64.b64encode(bytes(f"{username}:{password}", 'utf-8')).decode('utf-8')
-    print(encode_basic_auth)
     teachable_session = requests.Session()
     teachable_session.auth = (username, password)
     teachable_session.headers['Content-Type'] = 'application/json;charset=UTF-8'
@@ -46,4 +45,10 @@ def create_user(email: str, name: str, admin_username: str, admin_password: str)
     }
     teachable_session = create_session(admin_username, admin_password)
     response = teachable_session.post(url, json=data)
+    return response
+
+def get_users(username: str, password: str) -> requests.Response:
+    url = f"{TEACHABLE_URL_BASE}/users"
+    teachable_session = create_session(username, password)
+    response = teachable_session.get(url)
     return response

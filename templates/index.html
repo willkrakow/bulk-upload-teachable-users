@@ -4,44 +4,147 @@
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="static/index.css">
-    </head>
-    <body>
-        <main>
-            <h1>Teachable custom inputs</h1>
 
-            <section>
-                <h2>Bulk upload users</h2>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="static/index.css">
+</head>
 
-            <form enctype="multipart/form-data" action="/users" method="POST">
-                <label>
-                    Your Teachable username
+<body>
+    <header>
+        <h1>Teachable custom inputs</h1>
+        <nav>
+            <ul>
+                <li><a href='/'>Home</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h2>Bulk upload users</h2>
+        <form>
+            <label>Teachable username
                 <input type="text" name="username">
-                </label>
-                <label>
-                    Your Teachable password
+            </label>
+            <label>
+                Teachable password
                 <input type="password" name="password">
-                </label>
-                <label class="file">
-                    Upload users file (.csv)
-                <input type="file" name="new_user_file" id="thasdf" >
-                </label>
-                <label>
-                    Course
+            </label>
+        </form>
+        <form id="enroll">
+            </label>
+            <label class="file">
+                Upload users file (.csv)
+                <input type="file" name="new_user_file" id="new_user_file">
+            </label>
+            <label>
+                Course
                 <select name="course_id">
                     <option value="1541222">Community Rx</option>
                 </select>
-                </label>
-                <button type="submit">Add users</button>
-            </form>
-            </section>
-        </main>
-        <script src="" async defer></script>
-    </body>
+            </label>
+            <button type="submit">Add users</button>
+        </form>
+        <div id="user-count"></div>
+        <div id="table-wrapper"></div>
+    </main>
+    <script async defer>
+        function getUsernameAndPassword() {
+            var username = document.querySelector('input[name="username"]').value;
+            var password = document.querySelector('input[name="password"]').value;
+            return { username: username, password: password };
+        }
+
+        function postData(url, data) {
+            return fetch(url, {
+                method: 'POST',
+                body: data,
+            })
+                .then(res => console.log(res))
+        }
+
+        function handleSubmit(event, targetId, url, fileName) {
+            var formData = new FormData(
+                document.getElementById(targetId)
+            );
+            if (fileName) {
+                var uploadingFile = document.getElementById(fileName)
+                formData.append(fileName, uploadingFile.files[0]);
+            }
+            var usernameAndPassword = getUsernameAndPassword();
+            formData.append('username', usernameAndPassword.username);
+            formData.append('password', usernameAndPassword.password);
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+            })
+                .then(res => res.json())
+                .then((data) => {
+                    populateUserCount(data.user_count);
+                    populateTable(data.user_results);
+                })
+        }
+
+        function populateUserCount(userCount) {
+            var userCountElement = document.getElementById('user-count');
+            var userCounter = document.createElement('h4');
+            userCounter.innerText = `${userCount} users added`;
+            userCountElement.appendChild(userCounter);
+        }
+        
+        function populateTable(data) {
+            console.log(data)
+            var table = document.createElement('table');
+            var thead = document.createElement('thead');
+
+            var headerRow = document.createElement('tr');
+            var userInfoHeader = document.createElement('th');
+            var statusInfoHeader = document.createElement('th');
+            userInfoHeader.innerText = 'User info';
+            statusInfoHeader.innerText = 'Status';
+            headerRow.appendChild(userInfoHeader);
+            headerRow.appendChild(statusInfoHeader);
+
+            thead.appendChild(headerRow);
+            var tbody = document.createElement('tbody');
+
+
+            data.forEach(function (user) {
+                var tr = document.createElement('tr');
+                var userInfo = document.createElement('td');
+                var statusInfo = document.createElement('td');
+                userInfo.innerText = user.details;
+                statusInfo.innerText = user.status;
+                tr.appendChild(userInfo);
+                tr.appendChild(statusInfo);
+                if (user.status === "success") {
+                    tr.classList.add("green")
+                }
+                if (user.status === "already in course") {
+                    tr.classList.add("yellow")
+                }
+                if (user.status.includes("ERROR")) {
+                    tr.classList.add("red")
+                }
+                tbody.appendChild(tr);
+            });
+
+            table.appendChild(thead);
+            table.appendChild(tbody);
+            document.getElementById('table-wrapper').appendChild(table);
+            document.body.appendChild(table);
+        }
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('form#enroll').addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(e, 'enroll', "/users", "new_user_file") });
+        });
+    </script>
+</body>
+
 </html>
