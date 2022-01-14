@@ -131,6 +131,7 @@ button {
     width: 100%;
     border-radius: 0.25em;
     box-shadow: var(--shadow-regular);
+    margin: 5px 0;
 }
 
 button:hover {

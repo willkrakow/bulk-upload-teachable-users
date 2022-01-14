@@ -8,7 +8,7 @@ function displayUploaded_file(e) {
 function getUsernameAndPassword() {
     var username = document.querySelector('input[name="username"]').value;
     var password = document.querySelector('input[name="password"]').value;
-    return { username: username, password: password };
+    return { username, password };
 }
 
 function postData(url, data) {
@@ -39,7 +39,7 @@ function handleSubmit(event, targetId, url, fileName) {
     var formData = new FormData(
         document.getElementById(targetId)
     );
-    
+
     var uploadButton = document.getElementById(fileName);
     if (!uploadButton.files.length) {
         setError("No file selected")
@@ -53,12 +53,12 @@ function handleSubmit(event, targetId, url, fileName) {
         setError("Please enter a username and password");
         loadingDone();
         return;
-    }   
-    
+    }
+
     formData.append('username', usernameAndPassword.username);
     formData.append('password', usernameAndPassword.password);
 
-    
+
     fetch(url, {
         method: 'POST',
         body: formData,
@@ -72,7 +72,7 @@ function handleSubmit(event, targetId, url, fileName) {
         .finally(loadingDone)
 }
 
-function setError(error){
+function setError(error) {
     var errorElement = document.getElementById('error');
     errorElement.innerText = error;
 }
@@ -127,20 +127,60 @@ function populateTable(data) {
     document.body.appendChild(table);
 }
 
-function loading(){
+function loading() {
     var loading = document.getElementById('loading');
     loading.style.display = "block";
 }
 
-function loadingDone(){
+function loadingDone() {
     var loading = document.getElementById('loading');
     loading.style.display = "none";
+}
+
+async function getCourses() {
+    const formData = new FormData();
+    const usernameAndPassword = getUsernameAndPassword();
+    const { username, password } = usernameAndPassword;
+    if (!username.length || !password.length) {
+        setError("Please enter a username and password");
+        loadingDone();
+        return;
+    }
+
+    formData.append('username', username);
+    formData.append('password', password);
+    const res = await fetch('/courses', {
+        method: 'POST',
+        body: formData,
+    });
+    const data = await res.json();
+    console.log(data)
+    return data;
+}
+
+function populateCourses(courses) {
+    var courseSelect = document.getElementById('course-select');
+    courses.forEach(function (course) {
+        var option = document.createElement('option');
+        option.innerText = course.name;
+        option.value = course.id;
+        courseSelect.appendChild(option);
+    });
 }
 
 
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('form#enroll').addEventListener('submit', (e) => { e.preventDefault(); handleSubmit(e, 'enroll', "/users", "new_user_file") });
-    document.querySelector("#new_user_file").addEventListener('change', (e) => e.eventPhase === 2 ? displayUploaded_file(e) : null);
+    document.querySelector('form#enroll').addEventListener('submit', (e) => {
+        e.preventDefault();handleSubmit(e, 'enroll', "/users", "new_user_file") 
+    });
+    document.querySelector("#new_user_file").addEventListener('change', (e) => {
+        e.eventPhase === 2 ? displayUploaded_file(e) : null
+    });
+    document.querySelector("#refresh-courses").addEventListener('click', async (e) => {
+        e.preventDefault();
+        const data = await getCourses()
+        populateCourses(data.courses)
+    });
     loadingDone();
 });

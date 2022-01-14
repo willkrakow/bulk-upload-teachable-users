@@ -1,6 +1,7 @@
-from typing import Literal, TypedDict, Union
+from typing import Literal, TypedDict, Union, Any
 import requests
 import base64
+from flask.wrappers import Request
 
 TEACHABLE_URL_BASE = 'https://learn.plantpurecommunities.org/api/v1'
 
@@ -52,3 +53,12 @@ def get_users(username: str, password: str) -> requests.Response:
     teachable_session = create_session(username, password)
     response = teachable_session.get(url)
     return response
+
+def get_courses(req: Request) -> Any:
+    username = req.form['username']
+    password = req.form['password']
+    url = f"{TEACHABLE_URL_BASE}/courses"
+    teachable_session = create_session(username, password)
+    response = teachable_session.get(url)
+    data = response.json()
+    return data

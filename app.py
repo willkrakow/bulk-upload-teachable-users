@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template, url_for, send_from_directory
 from werkzeug.utils import send_file
 from route_functions import post_users
-
+from teachable import get_courses
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
@@ -19,3 +19,8 @@ def users():
 @app.route("/react", methods=['GET'])
 def react():
     return send_from_directory("client", "public/index.html")
+
+@app.route("/courses", methods=['POST'])
+def courses():
+    data = get_courses(request)
+    return data
